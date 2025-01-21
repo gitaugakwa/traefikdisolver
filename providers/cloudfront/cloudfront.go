@@ -16,7 +16,10 @@ func TrustedIPS() []string {
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Error making the request:", err)
-		return
+		return []string{
+			"0.0.0.0/0",
+			"::/0",
+		}
 	}
 	defer resp.Body.Close() // Ensure the response body is closed
 
@@ -24,7 +27,10 @@ func TrustedIPS() []string {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println("Error reading the response body:", err)
-		return
+		return []string{
+			"0.0.0.0/0",
+			"::/0",
+		}
 	}
 	// Define a map to hold the JSON data
 	var data map[string][]string
@@ -33,7 +39,10 @@ func TrustedIPS() []string {
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		fmt.Println("Error parsing the JSON:", err)
-		return
+		return []string{
+			"0.0.0.0/0",
+			"::/0",
+		}
 	}
 
 	// Extract the arrays
@@ -42,13 +51,16 @@ func TrustedIPS() []string {
 
 	if !globalExists && !regionalExists {
 		fmt.Println("Both keys are missing in the response")
-		return
+		return []string{
+			"0.0.0.0/0",
+			"::/0",
+		}
 	}
 
 	// Merge the arrays
 	mergedIPList := append(globalIPList, regionalIPList...)
-	
-	return mergedIPList, nil
+
+	return mergedIPList
 }
 
 const ClientIPHeaderName = "Cloudfront-Viewer-Address"
