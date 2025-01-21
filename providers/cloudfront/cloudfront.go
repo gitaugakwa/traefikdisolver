@@ -11,6 +11,7 @@ import (
 // CFIPs is the CloudFlare Server IP list (this is checked on build).
 func TrustedIPS() []string {
 
+	// Found at https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html
 	url := "https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips"
 
 	resp, err := http.Get(url)
